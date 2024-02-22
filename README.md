@@ -15,8 +15,8 @@ Esse documento tem como o intuito explicar como o processador feito funciona, fa
 
 Esse componente serve para registrar em qual posição da memória deve ler uma determinada instrução. Resumidamente, é ela que "diz" qual instrução é a próxima a ser lida.
 
-***A (32 bits)*** -> Endereço da instrução que será lida
-***Clk (1 bit)*** -> Clock do processador
+***A (32 bits)*** -> Endereço da instrução que será lida <br>
+***Clk (1 bit)*** -> Clock do processador <br><br>
 ***Rst (1 bit)*** -> Reset do registrador, responsável por retornar ao endereço 0
 
 
@@ -25,8 +25,8 @@ Esse componente serve para registrar em qual posição da memória deve ler uma 
 
 Componente de memória ROM. Você pode carregar o programa em Intel HEX aqui, vindo do MARS por exemplo, contendo as instruções do seu programa.
 
-***A (8 Bits)***
-***Sel (8 Bits)***
+***A (8 Bits)***<br>
+***Sel (8 Bits)***<br><br>
 
 ***D (32 Bits)*** -> Instrução apontada pela entrada "A"
 
@@ -35,7 +35,7 @@ Componente de memória ROM. Você pode carregar o programa em Intel HEX aqui, vi
 
 Esse componente é simples, ele recebe um endereço e soma +4 a ele. Isso serve para "Avançar" o endereço que deverá ser lido pela ROM. 
 
-***A (32 bits)*** -> Endereço do RegistradorPC
+***A (32 bits)*** -> Endereço do RegistradorPC<br><br>
 ***Y (32 bits)*** -> Endereço recebido com +4 (Esse endereço normalmente volta para o Registrador PC, como entrada)
 
 OBS: No processador por padrão (Caso não aconteça desvios), seu dado chega ao RegistradorPC, informando dessa forma que a próxima palavra deve ser lida, dando o seu endereço. Ou seja, ele normalmente dá o dado que chega no `A` do RegistradorPC, e o `Y` do RegistradorPC é o `A` do Soma4, formando assim um ciclo de "Avançar as instruções". No final do documento, será explicado a estrutura de desvio.
@@ -49,16 +49,16 @@ OBS: No processador por padrão (Caso não aconteça desvios), seu dado chega ao
 
 **R-Type** -> Como podemos ver pela estrutura, ela carrega o OPCode da instrução e também as informações dos 3 registradores, sendo eles:
 
-**rs** -> 1º Operando
-**rt** -> 2º Operando
-**rd** -> Registrador de Destino
+**rs** -> 1º Operando<br>
+**rt** -> 2º Operando<br>
+**rd** -> Registrador de Destino<br>
 
 Por exemplo, se temos a instrução tipo R ``ADD $t1, $t2, $t3``, teriamos a seguinte estrutura:
 
-**OpCode** = ``ADD``
-**rs** = ``$t2``
-**rt** = ``$t3``
-**rd** = ``$t1``
+**OpCode** = ``ADD``<br>
+**rs** = ``$t2``<br>
+**rt** = ``$t3``<br>
+**rd** = ``$t1``<br>
 
 *"Coloque dentro de ``$t1`` a soma de ``$t2`` com ``$t3``"*
 
@@ -68,10 +68,10 @@ O ``shamt`` e ``funct`` não serão totalmente explicados, mas o ``funct`` em al
 
 Outra característica desse tipo de instrução é o fato do `$rt` ser usado como Registrador de Destino. Então, na instrução dita mais acima, a estrutura ficaria da seguinte forma:
 
-**OpCode** = ``ADDI``
-**rs** = ``$t2``
-**rt** = ``$t1``
-**imm** = ``10``
+**OpCode** = ``ADDI``<br>
+**rs** = ``$t2``<br>
+**rt** = ``$t1``<br>
+**imm** = ``10``<br>
 
 *"Coloque dentro de `$t1` a soma de `$t2` com 10"*
 
@@ -119,7 +119,7 @@ Essa estrutura serve para melhorar o acesso as informações da instrução, uti
 
 Simples, esse componente serve para pegar uma entrada de 16 bits e converte-la para 32 bits. Isso pode ser usado para muitas coisas, desde extender algum dado ou até mesmo converter o dado que vem do `imm` para 32 bits.
 
-**A (16 bits)** -> Dado com 16 bits
+**A (16 bits)** -> Dado com 16 bits<br><br>
 **Y (32 bits)** -> Dado modificado com 32 bits
 
 
@@ -128,18 +128,18 @@ Simples, esse componente serve para pegar uma entrada de 16 bits e converte-la p
 
 Esse componente armazena todos os registradores do sistema, podendo resgatar e gravar informações neles.
 
-**RegRd1 (5 bits)** -> Registrador `$rs` (Normalmente o 1º Operando)
-**RegRd2 (5 bits)** -> Registrador `$rt` (Normalmente o 2º Operando)
-**RegWr (5 bits)** -> Registrador que vai ter dados escritos (Normalmente o Registrador de Destino)
-**WrData (32 bits)** -> Dado que vai ser escrito em um dos registradores.
-**Write (1 bit)** -> Sinal que informa que nesse ciclo de clock vai ter Escrita.
-**rst (1 bit)** -> Sinal que informa um Reset nos dados dos registradores
-**clk (1 bit)** -> Sinal de Clock
-**RbAdd (5 bits)** -> **(Debug)** Serve para dizer qual registrador vai ter dados lidos, ajudando no sistema de Debug explicado na seção de Debug.
+**RegRd1 (5 bits)** -> Registrador `$rs` (Normalmente o 1º Operando)<br>
+**RegRd2 (5 bits)** -> Registrador `$rt` (Normalmente o 2º Operando)<br>
+**RegWr (5 bits)** -> Registrador que vai ter dados escritos (Normalmente o Registrador de Destino)<br>
+**WrData (32 bits)** -> Dado que vai ser escrito em um dos registradores.<br>
+**Write (1 bit)** -> Sinal que informa que nesse ciclo de clock vai ter Escrita.<br>
+**rst (1 bit)** -> Sinal que informa um Reset nos dados dos registradores<br>
+**clk (1 bit)** -> Sinal de Clock<br>
+**RbAdd (5 bits)** -> **(Debug)** Serve para dizer qual registrador vai ter dados lidos, ajudando no sistema de Debug explicado na seção de Debug.<br><br>
 
-**RdData1 (32 bits)** -> Dado do `$rs` requisitado
-**RdData2 (32 bits)** -> Dado do `$rt` requisitado
-**Rb (32 bits)** -> **(Debug)** Dado requisitado da entrada `RbAdd`, indo para o display, ajudando no sistema de Debug explicado na seção de Debug.
+**RdData1 (32 bits)** -> Dado do `$rs` requisitado<br>
+**RdData2 (32 bits)** -> Dado do `$rt` requisitado<br>
+**Rb (32 bits)** -> **(Debug)** Dado requisitado da entrada `RbAdd`, indo para o display, ajudando no sistema de Debug explicado na seção de Debug.<br>
 
 
 
@@ -157,10 +157,10 @@ Aqui chegamos a primeira imagem desse tipo! Perceba que é uma imagem que mostra
 
 Esse componente é responsável por selecionar qual operação deverá ser feita na ULA, uma soma, subtração, AND, OR e etc.
 
-**ALUOp (2 bits)** -> Operação que precisa ser executada.
-**Funct (6 bits)** -> Campo `funct` da instrução, mais comum nas instruções do tipo R
+**ALUOp (2 bits)** -> Operação que precisa ser executada.<br>
+**Funct (6 bits)** -> Campo `funct` da instrução, mais comum nas instruções do tipo R<br><br>
 
-**Alu_Control_Vector (4 bits)** -> Opera ção que deve ser executada na ULA 
+**Alu_Control_Vector (4 bits)** -> Opera ção que deve ser executada na ULA <br>
 
 
 ### ULA
@@ -168,20 +168,20 @@ Esse componente é responsável por selecionar qual operação deverá ser feita
 
 O matemático do processador! Esse componente é responsável por fazer os cálculos necessários do processador, pegando 2 dados e 1 operação e retornando o resultado.
 
-**Operand 1 (32 bits)** -> Primeiro operando
-**Operand 2 (32 bits)** -> Segundo operando
-**Alu_Control_Vector (4 bits)** -> Operação que deve ser feita
+**Operand 1 (32 bits)** -> Primeiro operando<br>
+**Operand 2 (32 bits)** -> Segundo operando<br>
+**Alu_Control_Vector (4 bits)** -> Operação que deve ser feita<br><br>
 
-**ALU_Result (32 bits)** -> Resultado da operação
-**Zero (1 bit)** -> Sinal que informa se a operação retornou 0 (Útil para as operações de Desvio como BNE e BEQ)
+**ALU_Result (32 bits)** -> Resultado da operação<br>
+**Zero (1 bit)** -> Sinal que informa se a operação retornou 0 (Útil para as operações de Desvio como BNE e BEQ)<br>
 
 Abaixo está um exemplo das entradas:
 
 14 + 4
 
-*14* = `1º Operando`
-*4* = `2º Operando`
-*+* = `Operação` (Em binário seria 0010)
+*14* = `1º Operando`<br>
+*4* = `2º Operando`<br>
+*+* = `Operação` (Em binário seria 0010)<br>
 
 
 ### MUX DE SEGUNDO OPERANDO
@@ -194,10 +194,10 @@ Essa estrutura é responsável por selecionar qual vai ser o segundo operado a s
 
 Simples, um lugar onde dados podem ser guardados e resgatados. Normalmente operações de SW e LW mexem aqui.
 
-**A (8 bits)**
-**Din (32 bits)**
-**str (1 bit)**
-**C (1 bit)**
+**A (8 bits)**<br>
+**Din (32 bits)**<br>
+**str (1 bit)**<br>
+**C (1 bit)**<br><br>
 
 **D (8 bits)**
 
@@ -224,8 +224,8 @@ Resumindo, essa estrutura também controla o BEQ e BNE.
 
 Basicamente esse componente recebe o próximo endereço e um desvio que precisa ser feito, retornando um endereço com desvio.
 
-**Endereço (32 bits)**
-**Desvio (32 bits)**
+**Endereço (32 bits)**<br>
+**Desvio (32 bits)**<br><br>
 
 **EndereçoDesvio (32 bits)**
 
